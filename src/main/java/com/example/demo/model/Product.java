@@ -2,10 +2,10 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.*;
 
 @Entity
 @Table(name = "products")
