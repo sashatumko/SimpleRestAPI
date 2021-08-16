@@ -2,25 +2,44 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "products")
 public class Product {
 
+    @Id
+    @GeneratedValue()
     private UUID id;
-    private final String name;
-    private final String description;
-    private final String brand;
-    private final ArrayList<String> tags;
-    private final String category;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "brand")
+    private String brand;
+
+    @ElementCollection
+    @CollectionTable(name = "tags", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "tags")
+    private List<String> tags;
+
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "created_at")
     private String createdAt;
 
     public Product(@JsonProperty("id") UUID id,
                    @JsonProperty("name") String name,
                    @JsonProperty("description") String description,
                    @JsonProperty("brand") String brand,
-                   @JsonProperty("tags") ArrayList<String> tags,
+                   @JsonProperty("tags") List<String> tags,
                    @JsonProperty("category") String category,
                    @JsonProperty("created_at") String createdAt) {
         this.id = id;
@@ -32,25 +51,36 @@ public class Product {
         this.createdAt = createdAt;
     }
 
+    public Product() {
+
+    }
+
     public void setId(UUID id) { this.id = id; }
+
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public UUID getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
+
     public String getDescription() { return description; }
+
     public String getBrand() { return brand; }
-    public ArrayList<String> getTags() { return tags; }
+
+    public List<String> getTags() { return tags; }
+
     public String getCategory() { return category; }
+
     public String getCreatedAt() { return createdAt; }
 
     public String toJson() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            String jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
-            return jsonString;
+            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+            return json;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

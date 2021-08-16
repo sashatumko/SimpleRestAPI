@@ -1,15 +1,13 @@
 package com.example.demo.dao;
 
 import com.example.demo.model.Product;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Repository("fakeDao")
-public class FakeProductDataAccessService implements ProductDao {
+public class ProductDataAccessService implements ProductDao {
 
     private static List<Product> DB = new ArrayList<>();
 

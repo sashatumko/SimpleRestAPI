@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-public interface ProductDao {
+public interface ProductDao  {
 
     int insertProduct(UUID id, Product product, String createdAt);
 
@@ -17,7 +17,7 @@ public interface ProductDao {
         product.setId(id);
 
         // generate created_at
-        String time = ZonedDateTime.now( ZoneOffset.UTC ).format( DateTimeFormatter.ISO_INSTANT );
+        String time = ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT);
         product.setCreatedAt(time);
 
         return insertProduct(id, product, time);

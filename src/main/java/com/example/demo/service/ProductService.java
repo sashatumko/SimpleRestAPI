@@ -14,16 +14,10 @@ public class ProductService {
     private final ProductDao productDao;
 
     @Autowired
-    public ProductService(@Qualifier("fakeDao") ProductDao productDao) {
-        this.productDao = productDao;
-    }
+    public ProductService(@Qualifier("fakeDao") ProductDao productDao) { this.productDao = productDao; }
 
-    public int addProduct(Product product) {
-        return productDao.insertProduct(product);
-    }
+    public int addProduct(Product product) { return productDao.insertProduct(product); }
 
-    public List<Product> getAllProducts() {
-        return productDao.selectAllProducts();
-    }
+    public List<Product> getAllProducts() { return productDao.selectAllProducts(); }
 
 }
