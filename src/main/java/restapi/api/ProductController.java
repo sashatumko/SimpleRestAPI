@@ -25,8 +25,11 @@ public class ProductController {
     @Autowired
     ProductDao productDao;
 
-    // insert a product into DB
-    // endpoint: /v1/products
+    /**
+     * Handling insertion of products (POST requests) at endpoint /v1/product
+     * @param product object representing product parsed from request body
+     * @return the inserted object in JSON format
+     */
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         try {
@@ -39,8 +42,10 @@ public class ProductController {
         }
     }
 
-    // get all products from DB
-    // endpoint: /v1/products
+    /**
+     * Handling GET requests to endpoint /v1/products, returns all products
+     * @return list of all products in database
+     */
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
         try {
@@ -58,9 +63,13 @@ public class ProductController {
         }
     }
 
-    // get products from DB by category
-    // supports pagination, products returned sorted by creation time (newest to oldest)
-    // /v1/products/{category}?page=1&max=25
+    /**
+     * Handling GET requests to endpoint /v1/products/{category}
+     * @param category The desired category field value of products being requested
+     * @param page Optional parameter to specify which page to request (default 0)
+     * @param max Optional parameter to specify a maximum number of products per page (default 3)
+     * @return list of products with exact category match sorted from newest to oldest
+     */
     @GetMapping("/{category}")
     public ResponseEntity<Map<String, Object>> findByCategory(
             @PathVariable(required = true) String category,

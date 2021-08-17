@@ -10,8 +10,12 @@ To build and run a project artifact, run the following commands in the root dire
 $ mvn package
 $ java -jar target/restapi-0.0.1-SNAPSHOT.jar
 ```
-In order for this to work you must have Apache Maven and H2 installed.
-Due to this I've also included the executable in the target directory.
+
+In order for this to work you must have Apache Maven installed, 
+so I've also included the executable in the target directory.
+The server runs on `localhost:8080`
+You also need to have H2 installed. The H2 console can be accessed 
+at `localhost:8080/h2` with JDBC URL `jdbc:h2:mem:products`, username `centric` and no password.
 
 ### API
 
