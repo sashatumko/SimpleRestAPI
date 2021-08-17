@@ -12,7 +12,7 @@ public interface ProductDao extends JpaRepository<Product, Long> {
 
     Page<Product> findByCategory(String category, Pageable pageable);
 
-    Page<Product> findByCategoryContaining(String category, Pageable pageable);
+    //Page<Product> findByCategoryContaining(String category, Pageable pageable);
 
-    List<Product> findByCategoryContaining(String category, Sort sort);
+    //List<Product> findByCategory(String category, Pageable pageable, Sort sort);
 }

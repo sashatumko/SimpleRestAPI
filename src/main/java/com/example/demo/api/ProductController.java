@@ -62,21 +62,25 @@ public class ProductController {
             @RequestParam(name = "max", required = false, defaultValue = "3") int max
     ) {
         try {
-            //System.out.println("category: " + category + " page: " + page + " max: " + max);
-            List<Product> products = new ArrayList<Product>();
-            Pageable paging = PageRequest.of(page, max);
+            System.out.println("category: " + category + " page: " + page + " max: " + max);
 
-            Page<Product> pageTuts = productDao.findByCategory(category, paging);
-            products = pageTuts.getContent();
+            Pageable paging = PageRequest.of(page, max, Sort.by(Sort.Direction.DESC, "createdAt"));
+            Page<Product> pageProducts = productDao.findByCategory(category, paging);
+            List<Product> products = pageProducts.getContent();
+
+            if (products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
 
             Map<String, Object> response = new HashMap<>();
             response.put("products", products);
-            response.put("currentPage", pageTuts.getNumber());
-            response.put("totalItems", pageTuts.getTotalElements());
-            response.put("totalPages", pageTuts.getTotalPages());
+            response.put("currentPage", pageProducts.getNumber());
+            response.put("totalItems", pageProducts.getTotalElements());
+            response.put("totalPages", pageProducts.getTotalPages());
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e.toString());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
