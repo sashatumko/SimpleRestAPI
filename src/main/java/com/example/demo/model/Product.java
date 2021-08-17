@@ -50,13 +50,12 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    public Product() {
-
-    }
+    public Product() {}
 
     public void setId(UUID id) { this.id = id; }
 
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+
     public UUID getId() {
         return id;
     }
@@ -79,8 +78,7 @@ public class Product {
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
-            return json;
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
