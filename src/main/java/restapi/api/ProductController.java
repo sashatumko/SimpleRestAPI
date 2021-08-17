@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.net.URLDecoder;
 
 @RestController
 @RequestMapping("/v1/products")
@@ -70,15 +69,14 @@ public class ProductController {
     ) {
         try {
             Pageable paging = PageRequest.of(page, max, Sort.by(Sort.Direction.DESC, "createdAt"));
-            List<Product> products = new ArrayList<Product>();
+            List<Product> products;
             Page<Product> pageProducts;
 
             if(category == null) {
                 pageProducts = productDao.findAll(paging);
             }
             else {
-                String decodedCategory = URLDecoder.decode(category, "UTF-8");
-                pageProducts = productDao.findByCategory(decodedCategory, paging);
+                pageProducts = productDao.findByCategory(category, paging);
             }
 
             products = pageProducts.getContent();
