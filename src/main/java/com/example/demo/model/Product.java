@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
-
 @Entity
 @Table(name = "products")
 public class Product {
@@ -76,7 +75,8 @@ public class Product {
 
     public String getCreatedAt() { return createdAt; }
 
-    public String toJson() {
+    @Override
+    public String toString() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
@@ -86,5 +86,4 @@ public class Product {
             return null;
         }
     }
-
 }
