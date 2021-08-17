@@ -28,10 +28,10 @@ Include the JSON representation of the product to be inserted in the body of the
 The response will return the result of the insertion (the product entity data itself)
 Example request:
 ```console
-$ curl --request POST                            \
-       --header "Content-Type: application/json" \
-       --write-out "%{http_code}\n"              \
-       --data '{product in JSON}'                \
+$ curl --request POST                            
+       --header "Content-Type: application/json" 
+       --write-out "%{http_code}\n"              
+       --data '{product in JSON}'                
         http://localhost:8080/v1/products
 ```
 
@@ -40,11 +40,11 @@ A list of products will be returned based on exact match on the
 text of the ‘category’ field, listed from newest to oldest based on the 'created_at' field.
 This endpoint also supports pagination via the 'page' and 'max' parameters.
 Setting the 'max' sets a limit for the maximum number of products to return per page.  
-Example request:
+Example request searching database by category 'apparel' on page 1 with page size 25:
 ```console
-$ curl --request GET                            \
-       --header "Content-Type: application/json" \
-       --write-out "%{http_code}\n"              \
+$ curl --request GET                            
+       --header "Content-Type: application/json" 
+       --write-out "%{http_code}\n"              
         http://localhost:8080/v1/products/apparel?page=1&max=25
 ```
 
