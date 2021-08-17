@@ -1,6 +1,6 @@
-package com.example.demo.dao;
+package restapi.dao;
 
-import com.example.demo.model.Product;
+import restapi.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

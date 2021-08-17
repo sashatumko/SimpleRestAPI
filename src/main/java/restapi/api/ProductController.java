@@ -1,7 +1,7 @@
-package com.example.demo.api;
+package restapi.api;
 
-import com.example.demo.dao.ProductDao;
-import com.example.demo.model.Product;
+import restapi.dao.ProductDao;
+import restapi.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
@@ -75,7 +75,8 @@ public class ProductController {
 
             if(category == null) {
                 pageProducts = productDao.findAll(paging);
-            } else {
+            }
+            else {
                 String decodedCategory = URLDecoder.decode(category, "UTF-8");
                 pageProducts = productDao.findByCategory(decodedCategory, paging);
             }

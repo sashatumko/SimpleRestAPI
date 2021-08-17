@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package restapi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
