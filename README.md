@@ -1,18 +1,17 @@
 ### Simple Rest API
 
-a very simple Product REST API storing products in an in-memory SQL database (H2).
-This project uses Java 8, Maven, and the Spring boot 2.5.3 framework.
+A REST API for storing products in an in-memory SQL database (H2).
+This project uses Java with Gradle and the Spring boot framework.
 
 ### Building and Running 
 
 To build and run a project artifact, run the following commands in the root directory of the repository:
 ```console
-$ mvn clean install
-$ java -jar target/restapi-0.0.1-SNAPSHOT.jar --server.port=8080
+$ gradle clean build
+$ java -jar .\build\libs\restapi-0.0.1-SNAPSHOT.jar --server.port=8080
 ```
 
-In order for this to work you must have Apache Maven.
-I've included the executable in the target directory which can be ran directly assuming H2 is installed.
+In order for this to work you must have Gradle installed, but I've included the executable in the target directory which can be ran directly assuming H2 is installed.
 The server runs on port 8080 by default. The H2 console can be accessed at `localhost:8080/h2` with JDBC URL `jdbc:h2:mem:products`, username `centric` and no password.
 
 ### API
