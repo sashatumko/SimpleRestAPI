@@ -2,23 +2,36 @@ import unittest
 import subprocess
 import requests
 import json
+import os
 
 localhost = "localhost" 
 port = 8080
+products = []       # list of JSON objects loaded from /products subdir
+productCount = 0
+
+def incrementProductCount():
+    global productCount
+    productCount += 1
+
+def loadExampleProducts():
+    for filename in os.listdir("products"):
+        f = open(os.path.join("products", filename))
+        products.append(json.load(f))
+        f.close()
 
 class Client():
+
     def getAllProducts(self):
         result = requests.get('http://%s:%s/v1/products'%(localhost, str(port)),
             json = {},
             headers = {"Content-Type": "application/json"})
-        print("\nGET ALL PRODUCTS\n")
+        print("\nGet all products:\n")
         return result
 
     def getProduct(self, category, pageNumber, maxPages):
         result = requests.get('http://%s:%s/v1/products/%s?page=%s&max=%s'%(localhost, str(port), category, str(pageNumber), str(maxPages)),
             json = {},
             headers = {"Content-Type": "application/json"})
-        print("\nSEARCH BY CATEGORY: %s, PAGE NUMBER: %s, PAGE SIZE: %d\n"%(category, pageNumber, maxPages))
         return result
 
     def insertProduct(self, product):
@@ -31,49 +44,14 @@ class Client():
                 'category': product['category']
             },
             headers = {"Content-Type": "application/json"})
-        print("\nINSERT PRODUCT\n%s\n"%str(json.dumps(product, indent=2)))
         return result
 
 client = Client()
 
-product1 = {
-	'name': 'Red Shirt', 
-	'description': 'Red Hugo Boss shirt', 
-	'brand': 'hugo boss',
-	'tags': ['red', 'shirt', 'hugo'],
-	'category': 'apparel'
-}
-
-product2 = {
-	'name': 'Blue Shirt', 
-	'description': 'Blue Gucci T-shirt', 
-	'brand': 'Gucci',
-	'tags': ['blue', 'gucci', 'designer', 'shirt'],
-	'category': 'apparel'
-}
-
-product3 = {
-	'name': 'Rolex Watch', 
-	'description': 'very expensive watch', 
-	'brand': 'Rolex',
-	'tags': ['rolex', 'watch', 'luxury'],
-	'category': 'accessories'
-}
-
-product4 = {
-	'name': 'Ray-Ban sunglasses', 
-	'description': 'Polarized sunglasses', 
-	'brand': 'Ray-Ban',
-	'tags': ['glasses', 'sunglasses', 'luxury'],
-	'category': 'accessories'
-}
-
 class TestAPI(unittest.TestCase):
 
     # asserts that response object matches product
-    def checkResponseBody(self, result, product):
-        resJson = result.json()
-        print("RESPONSE:\n", json.dumps(resJson, indent=2))
+    def checkResponseBody(self, resJson, product):
         self.assertEqual(resJson.get("name"), product['name'])
         self.assertEqual(resJson.get("description"), product['description'])
         self.assertEqual(resJson.get("brand"), product['brand'])
@@ -82,35 +60,48 @@ class TestAPI(unittest.TestCase):
 
     # checks for correct status code
     def checkStatusCode(self, result, code):
-        print("\nSTATUS CODE: %s EXPECTED: %s\n"%(str(result.status_code), code))
+        self.assertEqual(result.status_code, code)
 
-    # insert one product
+    # Test 1: insert one product
     def test1(self):
-        result = client.insertProduct(product1)
-        self.checkResponseBody(result, product1)
+        result = client.insertProduct(products[0])
+        self.checkResponseBody(result.json(), products[0])
         self.checkStatusCode(result, 201)
+        incrementProductCount()
 
-    # insert 3 more products and fetch all
+    # Test 2: insert one product and fetch via GET 
     def test2(self):
-        result = client.insertProduct(product2)
+        result = client.insertProduct(products[1])
+        self.checkResponseBody(result.json(), products[1])
         self.checkStatusCode(result, 201)
+        incrementProductCount()
 
-        result = client.insertProduct(product3)
-        self.checkStatusCode(result, 201)
-
-        result = client.insertProduct(product4)
-        self.checkStatusCode(result, 201)
-
-        result = client.getAllProducts()
-        print("RESPONSE:\n", json.dumps(result.json(), indent=2))
-        self.checkStatusCode(result, 200)
-
-    # get products by category 'apparel', page 0, page size 1
-    def test3(self):
         result = client.getProduct('apparel', 0, 1)
-        print("RESPONSE:\n", json.dumps(result.json(), indent=2))
+        resJson = result.json()
+        self.checkStatusCode(result, 200)
+        # assert that only 1 object is returned (since page limit was 1)
+        responseProductList = resJson['products']
+        self.assertEqual(len(responseProductList), 1) 
+        self.checkResponseBody(responseProductList[0], products[1])
+        
+    # Test 3: insert 5 products
+    def test3(self):
+        for i in range (2, 7):
+            result = client.insertProduct(products[i])
+            self.checkStatusCode(result, 201)
+            incrementProductCount()
+        result = client.getAllProducts()
+        self.assertEqual(len(result.json()), productCount) 
         self.checkStatusCode(result, 200)
 
-
+    # Test 4: get products by category 'apparel' (4 total)
+    def test4(self):
+        result = client.getProduct('apparel', 0, 4)
+        resJson = result.json()
+        self.checkStatusCode(result, 200)
+        responseProductList = resJson['products']
+        self.assertEqual(len(responseProductList), 4)  # since 4 items in apparel category
+        
 if __name__ == '__main__':
+    loadExampleProducts()
     unittest.main()

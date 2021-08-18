@@ -1,0 +1,7 @@
+{
+	"name": "Rolex Watch", 
+	"description": "very expensive watch", 
+	"brand": "Rolex",
+	"tags": ["rolex", "watch", "luxury"],
+	"category": "accessories"
+}

@@ -7,13 +7,13 @@ This project uses Java 8, Maven, and the Spring boot 2.5.3 framework.
 
 To build and run a project artifact, run the following commands in the root directory of the repository:
 ```console
-$ mvn package
-$ java -jar target/restapi-0.0.1-SNAPSHOT.jar
+$ mvn clean install
+$ java -jar target/restapi-0.0.1-SNAPSHOT.jar --server.port=8080
 ```
 
-In order for this to work you must have Apache Maven and H2 installed.
-I've included the executable in the target directory which can be ran directly.
-The server runs on `localhost:8080`. The H2 console can be accessed at `localhost:8080/h2` with JDBC URL `jdbc:h2:mem:products`, username `centric` and no password.
+In order for this to work you must have Apache Maven.
+I've included the executable in the target directory which can be ran directly assuming H2 is installed.
+The server runs on port 8080 by default. The H2 console can be accessed at `localhost:8080/h2` with JDBC URL `jdbc:h2:mem:products`, username `centric` and no password.
 
 ### API
 
@@ -31,8 +31,7 @@ The response will be the result of the insertion (the product entity data itself
 Example request to insert :
 ```console
 $ curl --request POST                            
-       --header "Content-Type: application/json" 
-       --write-out "%{http_code}\n"              
+       --header "Content-Type: application/json"              
        --data '{JSON OBJECT}'
         http://localhost:8080/v1/products
 ```
@@ -45,8 +44,7 @@ Setting the 'max' sets a limit for the maximum number of products to return per 
 Example request searching database by category 'apparel' on page 1 with page size 25:
 ```console
 $ curl --request GET                            
-       --header "Content-Type: application/json" 
-       --write-out "%{http_code}\n"              
+       --header "Content-Type: application/json"             
         http://localhost:8080/v1/products/apparel?page=1&max=25
 ```
 
