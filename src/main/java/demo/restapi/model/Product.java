@@ -54,7 +54,7 @@ public class Product {
 
     public void setId(UUID id) { this.id = id; }
 
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public void setCreatedAt(String created_at) { this.createdAt = created_at; }
 
     public UUID getId() {
         return id;
@@ -80,7 +80,6 @@ public class Product {
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }

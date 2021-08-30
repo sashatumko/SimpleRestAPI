@@ -21,15 +21,8 @@ def loadExampleProducts():
 
 class Client():
 
-    def getAllProducts(self):
-        result = requests.get('http://%s:%s/v1/products'%(localhost, str(port)),
-            json = {},
-            headers = {"Content-Type": "application/json"})
-        print("\nGet all products:\n")
-        return result
-
-    def getProduct(self, category, pageNumber, maxPages):
-        result = requests.get('http://%s:%s/v1/products/%s?page=%s&max=%s'%(localhost, str(port), category, str(pageNumber), str(maxPages)),
+    def getProducts(self, category, pageNumber, maxPages, sortBy):
+        result = requests.get('http://%s:%s/v1/products?category=%s&page=%s&max=%s&sort=%s'%(localhost, str(port), category, str(pageNumber), str(maxPages), str(sortBy)),
             json = {},
             headers = {"Content-Type": "application/json"})
         return result
@@ -76,7 +69,7 @@ class TestAPI(unittest.TestCase):
         self.checkStatusCode(result, 201)
         incrementProductCount()
 
-        result = client.getProduct('apparel', 0, 1)
+        result = client.getProducts('all', 1, 1, "-createdAt")
         resJson = result.json()
         self.checkStatusCode(result, 200)
         # assert that only 1 object is returned (since page limit was 1)
@@ -90,13 +83,13 @@ class TestAPI(unittest.TestCase):
             result = client.insertProduct(products[i])
             self.checkStatusCode(result, 201)
             incrementProductCount()
-        result = client.getAllProducts()
-        self.assertEqual(len(result.json()), productCount) 
+        result = client.getProducts('all', 1, 7, "-createdAt")
+        self.assertEqual(result.json().get("total_items"), productCount)
         self.checkStatusCode(result, 200)
 
     # Test 4: get products by category 'apparel' (4 total)
     def test4(self):
-        result = client.getProduct('apparel', 0, 4)
+        result = client.getProducts('apparel', 1, 4, "-createdAt")
         resJson = result.json()
         self.checkStatusCode(result, 200)
         responseProductList = resJson['products']

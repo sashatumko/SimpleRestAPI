@@ -22,7 +22,6 @@ JSON format and with the appropriate HTTP status code.
 | Endpoint URI              | accepted request types |
 | ------------------------- | ---------------------- |
 | `/v1/product`             | GET, POST              |
-| `/v1/product/{category}`  | GET                    |
 
 - Insert a product by sending a POST request to endpoint: `/v1/products`.
 You must include the JSON representation of the product to be inserted in the body of the request.
@@ -35,23 +34,18 @@ $ curl --request POST
         http://localhost:8080/v1/products
 ```
 
-- Search products by category by sending a GET request to endpoint: `/v1/products/{category}`. 
-A list of products will be returned based on exact match on the 
-text of the ‘category’ field, listed from newest to oldest based on the 'created_at' field.
-This endpoint also supports pagination via the 'page' and 'max' parameters.
-Setting the 'max' sets a limit for the maximum number of products to return per page.  
-Example request searching database by category 'apparel' on page 1 with page size 25:
+- Search products by category by sending a GET request to endpoint: `/v1/products`. 
+There are 4 optional parameters: category, page, max, and sort.
+Products are searched for by exact match to the category parameter. Pages are numbered starting at 1, 
+and the `max` parameter specifies a limit on products listed per page. The `sort` parameter 
+is used to sort products in either descending (-) or ascending (+) order via the specified field.
+Example request searching database by category 'apparel' on page 1 
+with page size 25, sorted by descending creation time:
 ```console
 $ curl --request GET                            
        --header "Content-Type: application/json"             
-        http://localhost:8080/v1/products/apparel?page=1&max=25
-```
-
-Retrieve all products (GET request to endpoint: `/v1/products`)
-```console
-$ curl http://localhost:8080/v1/products
+        http://localhost:8080/v1/products?category=apparel&page=1&max=25&sort=-createdAt
 ```
 
 ### Testing
 I have included a Python test script in the testing directory which inserts and retrieves a few example products to the database.
-I also used Postman and the H2 console as a convenient way to perform simple API tests.
